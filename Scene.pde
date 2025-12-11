@@ -27,11 +27,15 @@ class Scene {
        }
     }
     
-    Arrays.sort(allData, new Comparator<Category>() {
-      public int compare(Category c1, Category c2) {
-        return Float.compare(c2.value, c1.value);
-      }
-    });
+for (int i = 0; i < allData.length; i++) {
+  for (int j = 0; j < allData.length - 1; j++) {
+    if (allData[j].value < allData[j+1].value) { 
+      Category temp = allData[j];
+      allData[j] = allData[j+1];
+      allData[j+1] = temp;
+    }
+  }
+}
     
     for (int i = 0; i < 5; i++) {
       if (i < allData.length) {

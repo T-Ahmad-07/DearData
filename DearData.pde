@@ -202,14 +202,28 @@ String formatDatePretty(String rawDate) {
 }
 
 color getCategoryColor(String catName) {
-  if (catName.contains("Social")) return color(235, 87, 87);       
-  if (catName.contains("Communication")) return color(242, 153, 74); 
-  if (catName.contains("Movies")) return color(45, 156, 219);      
-  if (catName.contains("Music")) return color(155, 81, 224);       
-  if (catName.contains("Games")) return color(39, 174, 96);        
-  if (catName.contains("Creativity")) return color(242, 201, 76);  
-  if (catName.contains("Productivity")) return color(52, 73, 94);  
-  if (catName.contains("Others")) return color(149, 165, 166);     
-  
+  if (catName.contains("Social")){
+    return color(235, 87, 87);  
+  }
+  if (catName.contains("Communication")) { 
+    return color(242, 153, 74); 
+  }
+  if (catName.contains("Movies")) {
+    return color(45, 156, 219);  
+  }
+  if (catName.contains("Music")){ return color(155, 81, 224); 
+  }
+  if (catName.contains("Games")) {
+    return color(39, 174, 96); 
+  }
+  if (catName.contains("Creativity")){
+    return color(242, 201, 76);  
+  }
+  if (catName.contains("Productivity")){
+    return color(52, 73, 94);  
+  }
+  if (catName.contains("Others")){
+    return color(149, 165, 166);     
+  }
   return color(0); 
 }
