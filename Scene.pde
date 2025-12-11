@@ -1,7 +1,3 @@
-import processing.sound.*;
-import java.util.Arrays;
-import java.util.Comparator;
-
 class Scene {
 
   private float x;
@@ -15,9 +11,7 @@ class Scene {
   Scene(float x, float y) {
     this.x = x;
     this.y = y;
-    for (int i=0; i<5; i++) {
-    topCategories[i] = new Category("", 0);
-    }
+    for (int i=0; i<5; i++) topCategories[i] = new Category("", 0);
   }
   
   public void setData(String date, String[] headers, float[] values) {
@@ -57,11 +51,6 @@ class Scene {
   void draw() {
     isMouseIn();
     
-    if (x > width) {
-      x = 0;
-      y+=100;
-    }
-
     pushMatrix();
     translate(x, y);
     drawScene(1);
@@ -73,16 +62,19 @@ class Scene {
     float cx = 0;
     float cy = 0;
     
-    float h1 = map(topCategories[0].value, 0, 800, 0, 250); 
-    float h2 = map(topCategories[1].value, 0, 800, 0, 200);
-    float h3 = map(topCategories[2].value, 0, 800, 0, 200);
-    float h4 = map(topCategories[3].value, 0, 800, 0, 150);
-    float h5 = map(topCategories[4].value, 0, 800, 0, 150);
+    float maxH = 220; 
+    float maxValRoot = sqrt(800);
+    
+    float h1 = (topCategories[0].value > 0) ? map(sqrt(topCategories[0].value), 0, maxValRoot, 20, maxH) : 0;
+    float h2 = (topCategories[1].value > 0) ? map(sqrt(topCategories[1].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
+    float h3 = (topCategories[2].value > 0) ? map(sqrt(topCategories[2].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
+    float h4 = (topCategories[3].value > 0) ? map(sqrt(topCategories[3].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
+    float h5 = (topCategories[4].value > 0) ? map(sqrt(topCategories[4].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
 
     float peakY = cy + 100 - h1;
-    float sunY = peakY + 35; 
+    float sunY = peakY - 30; 
 
-    float hoverOffset = mouseIn ? -25 : 0;
+    float hoverOffset = mouseIn ? -15 : 0;
 
     if (!mouseIn) {
       fill(10, 90, 120, 80);
@@ -118,7 +110,6 @@ class Scene {
 
   private void isMouseIn() {
     float d = dist(mouseX, mouseY, x, y + 50);
-    
     if (d < 85) {
       mouseIn = true;
     } else {
