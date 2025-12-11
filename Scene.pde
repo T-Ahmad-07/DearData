@@ -4,10 +4,9 @@ class Scene {
   private float y;
   private float radius = 75;
   private boolean mouseIn = false;
-  
   private String dateLabel = "";
   private Category[] topCategories = new Category[5];
-
+  
   Scene(float x, float y) {
     this.x = x;
     this.y = y;
@@ -16,26 +15,25 @@ class Scene {
   
   public void setData(String date, String[] headers, float[] values) {
     this.dateLabel = date;
-    
     Category[] allData = new Category[headers.length];
     
     for(int i = 0; i < headers.length; i++) {
        if (i < values.length) {
-         allData[i] = new Category(headers[i], values[i]); 
+         allData[i] = new Category(headers[i], values[i]);
        } else {
          allData[i] = new Category(headers[i], 0);
        }
     }
     
-for (int i = 0; i < allData.length; i++) {
-  for (int j = 0; j < allData.length - 1; j++) {
-    if (allData[j].value < allData[j+1].value) { 
-      Category temp = allData[j];
-      allData[j] = allData[j+1];
-      allData[j+1] = temp;
+    for (int i = 0; i < allData.length; i++) {
+      for (int j = 0; j < allData.length - 1; j++) {
+        if (allData[j].value < allData[j+1].value) { 
+          Category temp = allData[j];
+          allData[j] = allData[j+1];
+          allData[j+1] = temp;
+        }
+      }
     }
-  }
-}
     
     for (int i = 0; i < 5; i++) {
       if (i < allData.length) {
@@ -65,51 +63,50 @@ for (int i = 0; i < allData.length; i++) {
     scale(s);
     float cx = 0;
     float cy = 0;
-    
     float maxH = 220; 
     float maxValRoot = sqrt(800);
     
-    float h1 = (topCategories[0].value > 0) ? map(sqrt(topCategories[0].value), 0, maxValRoot, 20, maxH) : 0;
-    float h2 = (topCategories[1].value > 0) ? map(sqrt(topCategories[1].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
-    float h3 = (topCategories[2].value > 0) ? map(sqrt(topCategories[2].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
-    float h4 = (topCategories[3].value > 0) ? map(sqrt(topCategories[3].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
-    float h5 = (topCategories[4].value > 0) ? map(sqrt(topCategories[4].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
+    // Calculate height
+    float h1 = (topCategories[0].value > 0) ?
+      map(sqrt(topCategories[0].value), 0, maxValRoot, 20, maxH) : 0;
+    float h2 = (topCategories[1].value > 0) ?
+      map(sqrt(topCategories[1].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
+    float h3 = (topCategories[2].value > 0) ?
+      map(sqrt(topCategories[2].value), 0, maxValRoot, 20, maxH * 0.9) : 0;
+    float h4 = (topCategories[3].value > 0) ?
+      map(sqrt(topCategories[3].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
+    float h5 = (topCategories[4].value > 0) ?
+      map(sqrt(topCategories[4].value), 0, maxValRoot, 20, maxH * 0.7) : 0;
 
     float peakY = cy + 100 - h1;
     float sunY = peakY - 30; 
 
-    float hoverOffset = mouseIn ? -15 : 0;
+    // Draw Sun 
+    fill(245, 167, 90);
+    circle(cx, sunY, radius);
+    fill(0, 0, 0, 40);
+    circle(cx, sunY, radius * 0.75);
+    
+    
+    // Center Peak (h1)
+    fill(getCategoryColor(topCategories[0].name));
+    triangle(cx, cy + 100 - h1, cx-50, cy+100, cx+50, cy+100);
+    
+    // Left Outer Peak (h4)
+    fill(getCategoryColor(topCategories[3].name));
+    triangle(cx-50, cy + 100 - h4, cx-75, cy+100, cx-25, cy+100); 
 
-    if (!mouseIn) {
-      fill(10, 90, 120, 80);
-      
-      triangle(cx, cy + 100 - h1, cx-50, cy+100, cx+50, cy+100);
-      triangle(cx-35, cy + 100 - h2, cx-50, cy+100, cx-25, cy+100);
-      triangle(cx+35, cy + 100 - h3, cx+50, cy+100, cx+25, cy+100);
-      triangle(cx-50, cy + 100 - h4, cx-75, cy+100, cx-25, cy+100);
-      triangle(cx+50, cy + 100 - h5, cx+25, cy+100, cx+75, cy+100);
+    // Right Outer Peak (h5)
+    fill(getCategoryColor(topCategories[4].name));
+    triangle(cx+50, cy + 100 - h5, cx+25, cy+100, cx+75, cy+100);
 
-      fill(0, 0, 0, 25);
-      circle(cx, sunY + hoverOffset, radius);
-      circle(cx, sunY + hoverOffset, radius * 0.75);
-      
-    } else {
-      fill(245, 167, 90);
-      circle(cx, sunY + hoverOffset, radius);
-      fill(0, 0, 0, 40);
-      circle(cx, sunY + hoverOffset, radius * 0.75);
-      
-      fill(10, 90, 120); 
-      triangle(cx, cy + 100 - h1, cx-50, cy+100, cx+50, cy+100);
-      
-      fill(30, 100, 180); 
-      triangle(cx-50, cy + 100 - h4, cx-75, cy+100, cx-25, cy+100); 
-      triangle(cx+50, cy + 100 - h5, cx+25, cy+100, cx+75, cy+100); 
-      
-      fill(60, 100, 180); 
-      triangle(cx-35, cy + 100 - h2, cx-50, cy+100, cx-25, cy+100);
-      triangle(cx+35, cy + 100 - h3, cx+50, cy+100, cx+25, cy+100);
-    }
+    // Left Inner Peak (h2)
+    fill(getCategoryColor(topCategories[1].name)); 
+    triangle(cx-35, cy + 100 - h2, cx-50, cy+100, cx-25, cy+100);
+
+    // Right Inner Peak (h3)
+    fill(getCategoryColor(topCategories[2].name));
+    triangle(cx+35, cy + 100 - h3, cx+50, cy+100, cx+25, cy+100);
   }
 
   private void isMouseIn() {
@@ -128,7 +125,6 @@ for (int i = 0; i < allData.length; i++) {
   class Category {
     String name;
     float value;
-    
     Category(String n, float v) {
       name = n;
       value = v;
