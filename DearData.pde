@@ -1,9 +1,7 @@
-import processing.sound.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
 String[] myData;
-SoundFile sound;
 Scene[] mountain; 
 
 int cols;
@@ -16,7 +14,6 @@ void setup() {
   fullScreen(); 
   
   myData = loadStrings("Dear Data - In Mins.csv");
-  sound = new SoundFile(this, "noti.mp3");
 
   int numDays = myData.length - 1;
   mountain = new Scene[numDays];
@@ -72,7 +69,6 @@ void draw() {
     
     if (mountain[i].mouseIn()){
        hoveredScene = mountain[i];
-       if (!sound.isPlaying()) sound.play();
     }
   }
   
